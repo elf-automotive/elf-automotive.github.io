@@ -14,9 +14,9 @@
         }
 
         :root {
-            --bg-main: #050505; /* Tiefstes Schwarz */
+            --bg-main: #050505;
             --bg-card: #0d0d10;
-            --accent: #d90000; /* Sportliches Racing-Rot */
+            --accent: #d90000;
             --accent-glow: rgba(217, 0, 0, 0.6);
             --text-light: #f4f4f4;
             --text-muted: #888890;
@@ -27,11 +27,147 @@
             color: var(--text-light);
             overflow-x: hidden;
             scroll-behavior: smooth;
+            position: relative;
         }
 
-        /* CARBON TEXTURE BACKGROUND EFFECT */
-        body::before {
-            content: "";
+        /* V-ENGINE ANIMATED BACKGROUND */
+        #engine-background {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -10;
+            pointer-events: none;
+            perspective: 1200px;
+            overflow: hidden;
+            opacity: 0.15; /* Subtiler Effekt, lenkt nicht vom Inhalt ab */
+            background: linear-gradient(to bottom, #050505 0%, #0a0a0c 100%);
+        }
+
+        /* Glühendes Zentrum hinter dem Motor */
+        #engine-background::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 60vw; height: 60vh;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            animation: pulseGlowBg 4s infinite alternate;
+            z-index: -1;
+        }
+
+        .engine-container {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 800px; height: 600px;
+            transform: translate(-50%, -50%) rotateX(15deg) rotateY(-10deg);
+            transform-style: preserve-3d;
+        }
+
+        /* Der V-Block */
+        .v-block {
+            position: absolute;
+            bottom: 20%; left: 50%;
+            width: 200px; height: 250px;
+            background: rgba(20, 20, 25, 0.8);
+            border: 2px solid #333;
+            transform: translateX(-50%);
+            border-radius: 10px 10px 50px 50px;
+            box-shadow: inset 0 0 50px #000;
+        }
+
+        /* Zylinderbänke Links und Rechts */
+        .cylinder-bank {
+            position: absolute;
+            bottom: 60%;
+            width: 150px; height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            transform-style: preserve-3d;
+        }
+
+        .bank-left {
+            left: 30%;
+            transform: translateX(-100%) rotateZ(-35deg); /* V-Winkel links */
+        }
+
+        .bank-right {
+            right: 30%;
+            transform: translateX(100%) rotateZ(35deg); /* V-Winkel rechts */
+        }
+
+        .cylinder {
+            width: 100%; height: 60px;
+            border: 2px solid #444;
+            position: relative;
+            background: rgba(10, 10, 10, 0.9);
+            border-radius: 5px;
+            box-shadow: inset 0 0 20px #000, 0 0 10px rgba(217, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .piston {
+            position: absolute;
+            bottom: 0; left: 5%;
+            width: 90%; height: 30px;
+            background: linear-gradient(to top, #222, #555);
+            border-top: 3px solid var(--accent);
+            border-radius: 5px 5px 0 0;
+            box-shadow: 0 -5px 15px var(--accent-glow);
+        }
+
+        /* Kurbelwelle unten */
+        .crankshaft {
+            position: absolute;
+            bottom: 10%; left: 50%;
+            width: 40px; height: 40px;
+            background: #555;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 30px var(--accent);
+            animation: spin 0.8s linear infinite;
+        }
+        
+        .crank-pin {
+            position: absolute;
+            top: -20px; left: 50%;
+            width: 10px; height: 20px;
+            background: var(--text-muted);
+            transform: translateX(-50%);
+        }
+
+        /* Pleuelstangen (visuell vereinfacht angedeutet) */
+        .connecting-rod-visual {
+            position: absolute;
+            width: 4px;
+            background: #666;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+        }
+
+        /* Zylinder Animationen: Auf und Ab */
+        @keyframes pistonMove {
+            0%, 100% { bottom: 0; }
+            50% { bottom: 60%; }
+        }
+
+        /* Versetzte Zündfolgen für die 8 Zylinder */
+        .bank-left .cylinder:nth-child(1) .piston { animation: pistonMove 0.8s ease-in-out infinite; }
+        .bank-left .cylinder:nth-child(2) .piston { animation: pistonMove 0.8s ease-in-out infinite 0.2s; }
+        .bank-left .cylinder:nth-child(3) .piston { animation: pistonMove 0.8s ease-in-out infinite 0.4s; }
+        .bank-left .cylinder:nth-child(4) .piston { animation: pistonMove 0.8s ease-in-out infinite 0.6s; }
+
+        .bank-right .cylinder:nth-child(1) .piston { animation: pistonMove 0.8s ease-in-out infinite 0.4s; }
+        .bank-right .cylinder:nth-child(2) .piston { animation: pistonMove 0.8s ease-in-out infinite 0.6s; }
+        .bank-right .cylinder:nth-child(3) .piston { animation: pistonMove 0.8s ease-in-out infinite 0.8s; }
+        .bank-right .cylinder:nth-child(4) .piston { animation: pistonMove 0.8s ease-in-out infinite 0.2s; }
+
+        @keyframes spin { 100% { transform: translateX(-50%) rotateZ(360deg); } }
+        @keyframes pulseGlowBg { 0% { opacity: 0.3; } 100% { opacity: 0.8; } }
+
+        /* CARBON TEXTURE OVERLAY */
+        .texture-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(27deg, #111 5px, transparent 5px) 0 5px,
@@ -39,8 +175,8 @@
                         linear-gradient(117deg, #111 5px, transparent 5px) 0 0,
                         linear-gradient(117deg, #181818 5px, transparent 5px) 10px 5px;
             background-size: 20px 20px;
-            opacity: 0.15;
-            z-index: -1;
+            opacity: 0.1;
+            z-index: -9;
             pointer-events: none;
         }
 
@@ -60,7 +196,7 @@
         }
 
         .logo-container img {
-            height: 120px; /* Logo deutlich vergrössert Turn 1 von Turn 1 Turn 1 90px Turn 1 */
+            height: 120px;
             object-fit: contain;
             filter: drop-shadow(0 0 10px var(--accent-glow));
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -93,7 +229,7 @@
             transform: translateY(-2px);
         }
 
-        /* HERO SECTION WITH 3D EFFECT */
+        /* HERO SECTION */
         .hero {
             position: relative;
             min-height: 75vh;
@@ -103,25 +239,9 @@
             align-items: center;
             text-align: center;
             padding: 0 20px;
-            background: radial-gradient(circle, rgba(40,5,5,1) 0%, rgba(5,5,5,1) 80%);
             border-bottom: 2px solid #1a0000;
             overflow: hidden;
-        }
-
-        /* Dynamischer Roter Schein im Hintergrund */
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300px;
-            height: 300px;
-            background: var(--accent);
-            filter: blur(150px);
-            opacity: 0.2;
-            transform: translate(-50%, -50%);
-            animation: pulseGlow 4s infinite alternate;
-            z-index: 0;
+            background: radial-gradient(circle, rgba(20,5,5,0.8) 0%, rgba(5,5,5,0.9) 80%);
         }
 
         .hero h1 {
@@ -154,7 +274,6 @@
             z-index: 1;
         }
 
-        /* 3D ACTION BUTTON */
         .btn-main {
             position: relative;
             z-index: 1;
@@ -182,10 +301,11 @@
             box-shadow: 0 0 0 #590000, 0 2px 5px rgba(0,0,0,0.6);
         }
 
-        /* SERVICES SECTION (EXTREME 3D PERSPECTIVE CARDS) */
+        /* SERVICES SECTION */
         .services-section {
             padding: 100px 5%;
             text-align: center;
+            background: rgba(5,5,5,0.8);
         }
 
         .section-title {
@@ -214,7 +334,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 40px;
-            perspective: 1200px; /* Tieferer 3D Raum */
+            perspective: 1200px;
         }
 
         .service-card {
@@ -252,7 +372,7 @@
             margin-bottom: 20px;
             color: var(--accent);
             text-transform: uppercase;
-            transform: translateZ(40px); /* Text poppt in 3D heraus */
+            transform: translateZ(40px);
             text-shadow: 0 5px 10px rgba(0,0,0,0.5);
         }
 
@@ -263,10 +383,10 @@
             transform: translateZ(20px);
         }
 
-        /* FLYER & GALERIE ABSCHNITT */
+        /* FLYER SECTION */
         .flyer-section {
             padding: 100px 5%;
-            background: linear-gradient(to bottom, #000, #08080a);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(8,8,10,0.9));
             text-align: center;
             border-top: 1px solid #1a0000;
         }
@@ -310,7 +430,7 @@
 
         .flyer-overlay {
             position: absolute;
-            bottom: -50px; /* Startet versteckt */
+            bottom: -50px;
             left: 0; width: 100%;
             padding: 20px 15px;
             background: linear-gradient(transparent, rgba(217,0,0,0.9) 80%);
@@ -324,14 +444,14 @@
         }
 
         .flyer-item:hover .flyer-overlay {
-            bottom: 0; /* Fährt sanft hoch */
+            bottom: 0;
         }
 
-        /* SOCIAL MEDIA AREA */
+        /* SOCIAL MEDIA SECTION */
         .social-section {
             padding: 70px 5%;
             text-align: center;
-            background: var(--bg-main);
+            background: rgba(5,5,5,0.9);
             border-top: 1px solid #1a1a22;
         }
 
@@ -375,10 +495,10 @@
             box-shadow: 0 15px 30px rgba(255,255,255,0.2);
         }
 
-        /* LEGAL & RECHTSTEXTE (AGB / DATENSCHUTZ ACCORDION) */
+        /* LEGAL SECTION */
         .legal-section {
             padding: 80px 5%;
-            background: #08080a;
+            background: rgba(8,8,10,0.9);
             border-top: 1px solid #1a1a22;
         }
 
@@ -397,9 +517,7 @@
             transition: border-color 0.3s;
         }
 
-        .legal-box:hover {
-            border-color: #333;
-        }
+        .legal-box:hover { border-color: #333; }
 
         .legal-trigger {
             display: block;
@@ -418,7 +536,7 @@
         .legal-trigger:hover {
             background: #1a1a22;
             color: var(--accent);
-            padding-left: 30px; /* Kleine Hover-Animation */
+            padding-left: 30px;
         }
 
         .legal-trigger::after {
@@ -432,9 +550,7 @@
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .legal-checkbox {
-            display: none;
-        }
+        .legal-checkbox { display: none; }
 
         .legal-content {
             max-height: 0;
@@ -446,9 +562,7 @@
             line-height: 1.8;
         }
 
-        .legal-content-inner {
-            padding: 25px 0;
-        }
+        .legal-content-inner { padding: 25px 0; }
 
         .legal-content h4 {
             color: var(--text-light);
@@ -479,13 +593,44 @@
             font-weight: 600;
         }
 
-        /* IMPRESSUM & FOOTER */
+        /* MAP SECTION */
+        .map-section {
+            padding: 60px 5%;
+            background: rgba(5,5,5,0.95);
+            text-align: center;
+            border-top: 1px solid #1a1a22;
+        }
+
+        .map-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #222;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            transition: border-color 0.3s;
+        }
+
+        .map-container:hover {
+            border-color: var(--accent);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 400px;
+            border: 0;
+            display: block;
+            filter: invert(90%) hue-rotate(180deg) contrast(110%); /* Cooler Dark-Mode Effekt für die Karte */
+        }
+
+        /* FOOTER */
         .footer {
-            background: var(--bg-main);
-            padding: 80px 5% 40px 5%;
+            background: #000;
+            padding: 60px 5% 40px 5%;
             border-top: 3px solid var(--accent);
             font-size: 0.95rem;
-            box-shadow: 0 -10px 30px rgba(217,0,0,0.1);
+            position: relative;
+            z-index: 10;
         }
 
         .footer-grid {
@@ -521,7 +666,6 @@
         .footer-box a:hover {
             color: var(--accent);
             border-bottom: 1px solid var(--accent);
-            padding-bottom: 2px;
         }
 
         .footer-bottom {
@@ -535,7 +679,7 @@
             letter-spacing: 1px;
         }
 
-        /* FIXED FLOATING SIDE BUTTONS (WHATSAPP & CALL) */
+        /* FLOATING BUTTONS */
         .floating-action-container {
             position: fixed;
             bottom: 30px;
@@ -560,227 +704,31 @@
             position: relative;
         }
 
-        .btn-float.whatsapp {
-            background-color: #25D366;
-        }
-
+        .btn-float.whatsapp { background-color: #25D366; }
         .btn-float.whatsapp::before {
-            content: '';
-            position: absolute;
-            width: 100%; height: 100%;
-            background: #25D366;
-            border-radius: 50%;
-            z-index: -1;
+            content: ''; position: absolute; width: 100%; height: 100%;
+            background: #25D366; border-radius: 50%; z-index: -1;
             animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
         }
 
-        .btn-float.phone {
-            background-color: var(--accent);
-            color: #fff;
-        }
+        .btn-float.phone { background-color: var(--accent); color: #fff; }
 
         .btn-float:hover {
             transform: scale(1.15) translateY(-5px) rotate(5deg);
             box-shadow: 0 10px 25px rgba(0,0,0,0.7);
         }
 
-        .btn-float svg {
-            width: 30px;
-            height: 30px;
-            fill: currentColor;
-        }
+        .btn-float svg { width: 30px; height: 30px; fill: currentColor; }
 
-        /* New: Turn 1 schematic Turn 1 block Turn 1 */
-        #engine-background {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: var(--bg-main); /* Ensure Turn 1 Turn 1 */
-            z-index: -10; /* Behind everything Turn 1 */
-            pointer-events: none; /* Let clicks pass through Turn 1 */
-            perspective: 2000px;
-            overflow: hidden;
-            opacity: 0.12; /* Super subtle and sleek */
-        }
+        /* ANIMATIONS */
+        @keyframes popIn { 0% { transform: scale(0.8) translateY(50px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+        @keyframes fadeInUp { 0% { transform: translateY(30px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        @keyframes floatText { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes ping { 75%, 100% { transform: scale(1.8); opacity: 0; } }
 
-        /* Simulate Turn 1 background texture for Turn 1 */
-        #engine-background::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(27deg, #111 5px, transparent 5px) 0 5px,
-                        linear-gradient(27deg, #181818 5px, transparent 5px) 10px 10px,
-                        linear-gradient(117deg, #111 5px, transparent 5px) 0 0,
-                        linear-gradient(117deg, #181818 5px, transparent 5px) 10px 5px;
-            background-size: 20px 20px;
-            opacity: 0.15;
-            z-index: -1;
-        }
-        #engine-background::after {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 500px; height: 500px;
-            background: var(--accent);
-            filter: blur(250px);
-            opacity: 0.2;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-        }
-
-        /* Turn 1 schematic as Turn 1 */
-        .main-block, .cylinder-block, .crankshaft-container, .crankshaft, .cylinder, .piston, .connecting-rod {
-            position: absolute;
-            transform-style: preserve-3d;
-        }
-
-        .main-block {
-            width: 60%;
-            height: 30vh;
-            top: 35vh;
-            left: 20%;
-            background: rgba(13, 13, 16, 0.8);
-            border: 2px solid var(--accent);
-            box-shadow: 0 0 15px var(--accent-glow);
-            border-radius: 10px;
-            transform: rotateX(10deg);
-        }
-
-        .cylinder-block {
-            width: 60%;
-            height: 25vh;
-            top: 10vh;
-            left: 20%;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            perspective: 2000px;
-            transform: rotateX(10deg);
-        }
-
-        .cylinder {
-            width: 15%;
-            height: 100%;
-            border-left: 2px solid var(--accent);
-            border-right: 2px solid var(--accent);
-            position: relative;
-        }
-        .cylinder::before, .cylinder::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background: var(--accent);
-            box-shadow: 0 0 5px var(--accent-glow);
-        }
-        .cylinder::before { top: 0; }
-        .cylinder::after { bottom: 0; }
-
-        .piston {
-            width: 100%;
-            height: 10%;
-            background: var(--accent);
-            box-shadow: 0 0 15px var(--accent-glow);
-            top: 45%; /* Neutral position Turn 1 */
-            left: 0;
-            border-radius: 5px;
-        }
-
-        .connecting-rod {
-            width: 20%;
-            height: 100%;
-            background: var(--text-muted);
-            top: 10%;
-            left: 40%;
-            border-radius: 5px;
-            transform-origin: bottom center;
-        }
-
-        .crankshaft-container {
-            width: 60%;
-            height: 5vh;
-            top: 75vh;
-            left: 20%;
-            perspective: 2000px;
-        }
-
-        .crankshaft {
-            width: 100%;
-            height: 100%;
-            border-top: 2px solid var(--accent);
-            border-bottom: 2px solid var(--accent);
-            position: relative;
-        }
-        .crankshaft::before {
-            content: '';
-            position: absolute;
-            width: 2px;
-            height: 100%;
-            background: var(--accent);
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        /* ANIMATIONS Turn 1 */
-        .cylinder { animation: cylinderTurn 1.5s ease-in-out infinite alternate; }
-        .cyl2 { animation-delay: -0.3s; }
-        .cyl3 { animation-delay: -0.6s; }
-        .cyl4 { animation-delay: -0.9s; }
-
-        .piston { animation: pistonStroke 1.5s ease-in-out infinite alternate; }
-        .cyl2 .piston { animation-delay: -0.3s; }
-        .cyl3 .piston { animation-delay: -0.6s; }
-        .cyl4 .piston { animation-delay: -0.9s; }
-
-        .connecting-rod { animation: rodSwing 1.5s ease-in-out infinite alternate; }
-        .cyl2 .connecting-rod { animation-delay: -0.3s; }
-        .cyl3 .connecting-rod { animation-delay: -0.6s; }
-        .cyl4 .connecting-rod { animation-delay: -0.9s; }
-
-        .crankshaft { animation: crankshaftSpin 1.5s linear infinite; }
-
-        /* ANIMATIONS CODES */
-        @keyframes popIn {
-            0% { transform: scale(0.8) translateY(50px); opacity: 0; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
-        }
-
-        @keyframes fadeInUp {
-            0% { transform: translateY(30px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes floatText {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        @keyframes ping {
-            75%, 100% { transform: scale(1.8); opacity: 0; }
-        }
-
-        /* schematic Turn 1 animations */
-        @keyframes cylinderTurn {
-            0%, 100% { transform: rotateY(0deg) rotateX(0deg); }
-            50% { transform: rotateY(10deg) rotateX(5deg); }
-        }
-        @keyframes pistonStroke {
-            0%, 100% { transform: translateY(-45%); }
-            50% { transform: translateY(45%); }
-        }
-        @keyframes rodSwing {
-            0%, 100% { transform: rotateX(-15deg); }
-            50% { transform: rotateX(15deg); }
-        }
-        @keyframes crankshaftSpin {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
-        }
-
-        /* RESPONSIVE DESIGN ADJUSTMENTS */
+        /* RESPONSIVE */
         @media (max-width: 768px) {
-            .logo-container img { height: 90px; } /* Logo deutlich Turn 1 Turn 1, Turn 1 Turn 1 Turn 1 */
+            .logo-container img { height: 90px; }
             .hero h1 { font-size: 2.5rem; }
             .navbar { flex-direction: column; gap: 20px; padding: 20px 5%; }
             .nav-links { flex-wrap: wrap; justify-content: center; gap: 15px; }
@@ -788,10 +736,31 @@
             .btn-float { width: 55px; height: 55px; }
             .btn-float svg { width: 25px; height: 25px; }
             .section-title { font-size: 2.2rem; }
+            .map-container iframe { height: 300px; }
         }
     </style>
 </head>
 <body>
+
+    <div id="engine-background">
+        <div class="engine-container">
+            <div class="v-block"></div>
+            <div class="cylinder-bank bank-left">
+                <div class="cylinder"><div class="piston"></div></div>
+                <div class="cylinder"><div class="piston"></div></div>
+                <div class="cylinder"><div class="piston"></div></div>
+                <div class="cylinder"><div class="piston"></div></div>
+            </div>
+            <div class="cylinder-bank bank-right">
+                <div class="cylinder"><div class="piston"></div></div>
+                <div class="cylinder"><div class="piston"></div></div>
+                <div class="cylinder"><div class="piston"></div></div>
+                <div class="cylinder"><div class="piston"></div></div>
+            </div>
+            <div class="crankshaft"><div class="crank-pin"></div></div>
+        </div>
+    </div>
+    <div class="texture-overlay"></div>
 
     <nav class="navbar">
         <div class="logo-container">
@@ -802,7 +771,7 @@
             <li><a href="#services">Services</a></li>
             <li><a href="#flyers">Flyers</a></li>
             <li><a href="#legal">AGB & DSG</a></li>
-            <li><a href="#impressum">Impressum</a></li>
+            <li><a href="#location">Standort</a></li>
         </ul>
     </nav>
 
@@ -928,6 +897,18 @@
         </div>
     </section>
 
+    <section class="map-section" id="location">
+        <h2 class="section-title">Unser Standort</h2>
+        <div class="map-container">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2693.447548235472!2d9.6300483!3d47.4526563!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479b18f8e025d0c7%3A0x6e268f7b76e93e2b!2sParkstrasse%2015a%2C%209430%20St.%20Margrethen%2C%20Schweiz!5e0!3m2!1sde!2sch!4v1716912345678!5m2!1sde!2sch" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </section>
+
     <footer class="footer" id="impressum">
         <div class="footer-grid">
             <div class="footer-box">
@@ -960,31 +941,6 @@
                 <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.81 9.81 0 0 0 12.04 2zm5.79 13.92c-.25.7-.1.14-.56.76-.45.62-1.03.92-1.68 1.1-.65.18-1.42.25-3.8-.72-2.39-.97-3.92-3.39-4.04-3.55-.12-.17-1.02-1.36-1.02-2.59 0-1.23.64-1.83.87-2.08.23-.25.5-.31.66-.31.17 0 .34.01.48.01.15 0 .35-.06.55.42.2.49.69 1.68.75 1.8.06.12.1.27.01.44-.08.18-.13.29-.27.45-.13.16-.28.36-.4.51-.13.15-.27.31-.11.58.16.27.72 1.19 1.55 1.93.83.74 1.53 1.01 1.8 1.15.27.14.43.12.59-.06.16-.18.69-.81.88-1.08.19-.27.38-.23.64-.13s1.64.77 1.92.91c.28.14.47.21.54.33.07.12.07.71-.18 1.41z"/>
             </svg>
         </a>
-    </div>
-
-    <div id="engine-background">
-        <div class="main-block"></div>
-        <div class="cylinder-block">
-            <div class="cylinder cyl1">
-                <div class="piston"></div>
-                <div class="connecting-rod"></div>
-            </div>
-            <div class="cylinder cyl2">
-                <div class="piston"></div>
-                <div class="connecting-rod"></div>
-            </div>
-            <div class="cylinder cyl3">
-                <div class="piston"></div>
-                <div class="connecting-rod"></div>
-            </div>
-            <div class="cylinder cyl4">
-                <div class="piston"></div>
-                <div class="connecting-rod"></div>
-            </div>
-        </div>
-        <div class="crankshaft-container">
-            <div class="crankshaft"></div>
-        </div>
     </div>
 
 </body>
