@@ -42,7 +42,7 @@
             position: relative;
         }
 
-        /* V-ENGINE ANIMATED BACKGROUND */
+        /* V-ENGINE ANIMATED BACKGROUND (GLOBAL) - KEPT FROM ORIGINAL FOR CONSISTENCY */
         #engine-background {
             position: fixed;
             top: 0; left: 0;
@@ -222,7 +222,7 @@
             transform: translateY(-2px);
         }
 
-        /* HERO SECTION */
+        /* HERO SECTION WITH NEW ANIMATED MOTOR BACKGROUND */
         .hero {
             position: relative;
             min-height: 75vh;
@@ -234,6 +234,7 @@
             padding: 0 20px;
             border-bottom: 2px solid #1a0000;
             overflow: hidden;
+            /* Keep dimming gradient over image */
             background: radial-gradient(circle, rgba(20,5,5,0.8) 0%, rgba(5,5,5,0.9) 80%);
         }
 
@@ -291,6 +292,21 @@
         .btn-main:active {
             transform: translateY(6px);
             box-shadow: 0 0 0 #590000, 0 2px 5px rgba(0,0,0,0.6);
+        }
+
+        /* NEW: Hero background integration for image_24.png */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('image_24.png'); /* URL to the professional motor animation keyframe */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1; /* Layer under the text and content */
         }
 
         /* SERVICES SECTION */
@@ -651,41 +667,6 @@
             border-bottom: 1px solid var(--accent);
         }
 
-        /* ZAHLUNGSMETHODEN LISTE */
-        .payment-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .payment-list li {
-            color: var(--text-muted);
-            line-height: 2;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-
-        .payment-list li::before {
-            content: '►'; /* Sportlicher Pfeil passend zum Racing-Design */
-            color: var(--accent);
-            font-size: 0.8rem;
-            font-style: normal;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            margin-top: 60px;
-            padding-top: 25px;
-            border-top: 1px solid #1a1a22;
-            color: #444;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-family: 'Orbitron', sans-serif;
-        }
-
         /* FLOATING BUTTONS */
         .floating-action-container {
             position: fixed;
@@ -873,7 +854,7 @@
                         <p>Alle Leistungen und verbauten Ersatzteile sind, sofern nicht anders schriftlich vereinbart, direkt bei Abholung des Fahrzeugs in bar oder mittels akzeptierter elektronischer Zahlungsmittel zu begleichen. Die Garage behält sich das gesetzliche Retentionsrecht (Zurückbehaltungsrecht) am Fahrzeug bis zur vollständigen Bezahlung vor.</p>
 
                         <h4>5. Gewährleistung & Haftung</h4>
-                        <p>Die Garage gewährt die gesetzliche Gewährleistung auf ausgeführte Reparaturarbeiten und verbaute Originalteile. Jede Gewährleistung und Haftung für Mängel, die auf regulären Verschleiss, unsachgemässe Handhabung durch den Kunden (z.B. im Rennsport) oder nachträgliche Fremdeingriffe zurückzuführen sind, wird wegbedungen.</p>
+                        <p>Die Garage gewährt die gesetzliche Gewährleistung auf ausgeführre Reparaturarbeiten und verbaute Originalteile. Jede Gewährleistung und Haftung für Mängel, die auf regulären Verschleiss, unsachgemässe Handhabung durch den Kunden (z.B. im Rennsport) oder nachträgliche Fremdeingriffe zurückzuführen sind, wird wegbedungen.</p>
 
                         <h4>6. Gerichtsstand</h4>
                         <p>Als ausschliesslicher Gerichtsstand gilt, soweit gesetzlich zulässig, der Sitz der Garage (St. Margrethen, SG). Es gilt ausschliesslich Schweizer Recht.</p>
