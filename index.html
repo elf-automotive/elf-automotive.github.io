@@ -14,15 +14,13 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            /* Fließtext ist Roboto für Lesbarkeit */
             font-family: 'Roboto', sans-serif; 
         }
 
-        /* Überschriften, Buttons und Navigation exakt im Stil des Logos (Orbitron + schräg gestellt) */
         h1, h2, h3, h4, .nav-links a, .btn-main, .btn-social, .flyer-overlay, .legal-trigger {
             font-family: 'Orbitron', 'Kanit', sans-serif;
             text-transform: uppercase;
-            font-style: italic; /* Macht die Schrift schnell & aggressiv wie im Logo */
+            font-style: italic; 
         }
 
         :root {
@@ -39,7 +37,6 @@
             color: var(--text-light);
             overflow-x: hidden;
             scroll-behavior: smooth;
-            position: relative;
         }
 
         /* CARBON TEXTURE OVERLAY */
@@ -103,7 +100,7 @@
             transform: translateY(-2px);
         }
 
-        /* HERO SECTION WITH IMAGE BACKGROUND */
+        /* HERO SECTION */
         .hero {
             position: relative;
             min-height: 75vh;
@@ -115,36 +112,142 @@
             padding: 0 20px;
             border-bottom: 2px solid #1a0000;
             overflow: hidden;
-            
-            /* NEU: Das hochgeladene Bild als Hintergrund */
-            background-image: url('19441.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed; /* Parallax Effekt beim Scrollen */
+            background: #050505;
         }
 
-        /* Dunkles Overlay, damit der Text lesbar bleibt */
-        .hero::before {
+        /* ---------------------------------------------------
+           PURE CSS ANIMATED MOTORBLOCK IN THE HEADER 
+           --------------------------------------------------- */
+        .header-engine-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+            opacity: 0.25; /* Sichtbarer gemacht */
+            overflow: hidden;
+        }
+
+        .header-engine-bg::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(5, 5, 5, 0.85); /* Stärke der Abdunkelung */
-            z-index: 0;
+            top: 50%; left: 50%;
+            width: 80vw; height: 80vw;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 60%);
+            transform: translate(-50%, -50%);
+            opacity: 0.15;
+            animation: pulseGlowBg 3s infinite alternate;
+            z-index: -1;
         }
 
+        .v-engine-core {
+            position: relative;
+            width: 600px;
+            height: 500px;
+            transform-style: preserve-3d;
+            transform: rotateX(10deg);
+        }
+
+        .engine-block-base {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 180px;
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 10px 10px 40px 40px;
+            box-shadow: inset 0 0 40px #000, 0 0 20px rgba(217,0,0,0.2);
+        }
+
+        .crank-shaft-center {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: #222;
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            animation: engineSpin 0.6s linear infinite;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .bank {
+            position: absolute;
+            bottom: 40%;
+            width: 120px;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .bank.left {
+            left: 35%;
+            transform: translateX(-100%) rotateZ(-40deg);
+        }
+
+        .bank.right {
+            right: 35%;
+            transform: translateX(100%) rotateZ(40deg);
+        }
+
+        .css-cylinder {
+            width: 100%;
+            height: 50px;
+            border: 2px solid #444;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px #000;
+        }
+
+        .css-piston {
+            position: absolute;
+            bottom: 0; left: 5%;
+            width: 90%;
+            height: 30px;
+            background: #444;
+            border-top: 4px solid var(--accent);
+            box-shadow: 0 -5px 15px var(--accent-glow);
+        }
+
+        /* Piston Animations */
+        @keyframes stroke {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-30px); } /* Hub nach oben */
+        }
+        @keyframes engineSpin { 100% { transform: translateX(-50%) rotateZ(360deg); } }
+        @keyframes pulseGlowBg { 0% { opacity: 0.1; } 100% { opacity: 0.25; } }
+
+        /* Firing Order Delays */
+        .bank.left .css-cylinder:nth-child(1) .css-piston { animation: stroke 0.6s ease-in-out infinite; }
+        .bank.left .css-cylinder:nth-child(2) .css-piston { animation: stroke 0.6s ease-in-out infinite 0.15s; }
+        .bank.left .css-cylinder:nth-child(3) .css-piston { animation: stroke 0.6s ease-in-out infinite 0.3s; }
+        .bank.left .css-cylinder:nth-child(4) .css-piston { animation: stroke 0.6s ease-in-out infinite 0.45s; }
+
+        .bank.right .css-cylinder:nth-child(1) .css-piston { animation: stroke 0.6s ease-in-out infinite 0.3s; }
+        .bank.right .css-cylinder:nth-child(2) .css-piston { animation: stroke 0.6s ease-in-out infinite 0.45s; }
+        .bank.right .css-cylinder:nth-child(3) .css-piston { animation: stroke 0.6s ease-in-out infinite 0.6s; }
+        .bank.right .css-cylinder:nth-child(4) .css-piston { animation: stroke 0.6s ease-in-out infinite 0.15s; }
+
+        /* --------------------------------------------------- */
+
         .hero h1 {
-            font-size: 4rem; /* Leicht angepasst wegen der breiten Schrift */
+            font-size: 4rem;
             letter-spacing: 2px;
             margin-bottom: 20px;
             font-weight: 900;
             text-shadow: 0 10px 30px rgba(0,0,0,1);
             animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             position: relative;
-            z-index: 1;
+            z-index: 2; /* Text über dem Motor */
         }
 
         .hero h1 span {
@@ -156,18 +259,19 @@
 
         .hero p {
             font-size: 1.4rem;
-            color: #ccc;
+            color: #fff;
             max-width: 650px;
             margin-bottom: 40px;
             font-weight: 300;
+            text-shadow: 0 2px 10px #000;
             animation: fadeInUp 1.5s ease-out forwards;
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
         .btn-main {
             position: relative;
-            z-index: 1;
+            z-index: 2;
             display: inline-block;
             padding: 16px 40px;
             background: linear-gradient(135deg, #ff1a1a 0%, #990000 100%);
@@ -432,7 +536,7 @@
             font-size: 0.9rem;
             color: var(--text-muted);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            font-style: normal; /* Pfeil nicht schräg */
+            font-style: normal; 
         }
 
         .legal-checkbox { display: none; }
@@ -567,7 +671,7 @@
         }
 
         .payment-list li::before {
-            content: '►'; /* Sportlicher Pfeil passend zum Racing-Design */
+            content: '►';
             color: var(--accent);
             font-size: 0.8rem;
             font-style: normal;
@@ -643,6 +747,9 @@
             .btn-float svg { width: 25px; height: 25px; }
             .section-title { font-size: 2rem; }
             .map-container iframe { height: 300px; }
+            
+            /* Motor auf Handy kleiner machen */
+            .v-engine-core { transform: scale(0.6) rotateX(10deg); }
         }
     </style>
 </head>
@@ -664,7 +771,27 @@
     </nav>
 
     <header class="hero" id="home">
-        <h1>Welcome to <span>Elf Automotive</span></h1>
+        
+        <div class="header-engine-bg">
+            <div class="v-engine-core">
+                <div class="engine-block-base"></div>
+                <div class="bank left">
+                    <div class="css-cylinder"><div class="css-piston"></div></div>
+                    <div class="css-cylinder"><div class="css-piston"></div></div>
+                    <div class="css-cylinder"><div class="css-piston"></div></div>
+                    <div class="css-cylinder"><div class="css-piston"></div></div>
+                </div>
+                <div class="bank right">
+                    <div class="css-cylinder"><div class="css-piston"></div></div>
+                    <div class="css-cylinder"><div class="css-piston"></div></div>
+                    <div class="css-cylinder"><div class="css-piston"></div></div>
+                    <div class="css-cylinder"><div class="css-piston"></div></div>
+                </div>
+                <div class="crank-shaft-center"></div>
+            </div>
+        </div>
+
+        <h1>Welcome to <br><span>Elf Automotive</span></h1>
         <p>Ihre Experten für professionelle Fahrzeugreparaturen, qualifizierten Service und massgeschneidertes Tuning in der Schweiz.</p>
         <a href="tel:0798288606" class="btn-main">Jetzt Termin buchen</a>
     </header>
