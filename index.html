@@ -3,26 +3,706 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elf Automotive</title>
+    <title>Elf Automotive | Garage, Reparaturen & Tuning</title>
     <style>
+        /* CSS RESET & CORES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --bg-main: #0a0a0c;
+            --bg-card: #131317;
+            --accent: #99cc00; /* Neon Lime Green passend zum Vibe */
+            --accent-glow: rgba(153, 204, 0, 0.4);
+            --text-light: #ffffff;
+            --text-muted: #a0a0aa;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-light);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* CARBON TEXTURE BACKGROUND EFFECT */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+                        linear-gradient(27deg, #222 5px, transparent 5px) 10px 10px,
+                        linear-gradient(117deg, #151515 5px, transparent 5px) 0 0,
+                        linear-gradient(117deg, #222 5px, transparent 5px) 10px 5px;
+            background-size: 20px 20px;
+            opacity: 0.03;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* NAVIGATION BAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(10, 10, 12, 0.95);
+            border-bottom: 2px solid var(--accent);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+        .logo-container img {
+            height: 60px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px var(--accent-glow));
+            transition: transform 0.3s ease;
+        }
+
+        .logo-container img:hover {
+            transform: scale(1.05) rotate(-2deg);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        /* HERO SECTION WITH 3D EFFECT */
+        .hero {
+            position: relative;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            margin-top: 100px;
-            background-color: #f4f4f9;
-            color: #333;
+            padding: 0 20px;
+            background: radial-gradient(circle, rgba(20,25,15,1) 0%, rgba(10,10,12,1) 70%);
+            border-bottom: 1px solid #222;
         }
-        h1 {
-            color: #2c3e50;
+
+        .hero h1 {
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            font-weight: 900;
+            text-shadow: 0 0 20px rgba(0,0,0,0.8);
+            animation: driveIn 1.2s ease-out forwards;
         }
-        p {
-            font-size: 1.2em;
+
+        .hero h1 span {
+            color: var(--accent);
+            text-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 40px;
+            animation: fadeIn 2s ease-out forwards;
+        }
+
+        /* 3D ACTION BUTTON */
+        .btn-main {
+            display: inline-block;
+            padding: 15px 35px;
+            background: var(--accent);
+            color: #000;
+            text-decoration: none;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            box-shadow: 0 5px 0 #669900, 0 10px 20px rgba(0,0,0,0.4);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .btn-main:hover {
+            transform: translateY(2px);
+            box-shadow: 0 3px 0 #669900, 0 5px 15px rgba(0,0,0,0.4);
+        }
+
+        .btn-main:active {
+            transform: translateY(5px);
+            box-shadow: 0 0 0 #669900, 0 2px 5px rgba(0,0,0,0.4);
+        }
+
+        /* SERVICES SECTION (3D PERSPECTIVE CARDS) */
+        .services-section {
+            padding: 80px 5%;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            perspective: 1000px; /* Ermöglicht 3D Effekte */
+        }
+
+        .service-card {
+            background: var(--bg-card);
+            padding: 40px 30px;
+            border-radius: 8px;
+            border: 1px solid #222;
+            transition: transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+            transform-style: preserve-3d;
+        }
+
+        .service-card:hover {
+            transform: rotateY(10deg) rotateX(5deg) translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 15px 30px rgba(153, 204, 0, 0.15);
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .service-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* FLYER & GALERIE ABSCHNITT */
+        .flyer-section {
+            padding: 80px 5%;
+            background: #0f0f12;
+            text-align: center;
+        }
+
+        .flyer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .flyer-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 6px;
+            border: 2px solid #222;
+            background: #1a1a22;
+            aspect-ratio: 3 / 4; /* Perfekt für Flyer-Formate */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transition: border-color 0.3s;
+        }
+
+        .flyer-item:hover {
+            border-color: var(--accent);
+        }
+
+        .flyer-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .flyer-item:hover img {
+            transform: scale(1.08) rotate(1deg);
+        }
+
+        .flyer-overlay {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            padding: 15px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* SOCIAL MEDIA AREA */
+        .social-section {
+            padding: 50px 5%;
+            text-align: center;
+            background: var(--bg-main);
+            border-top: 1px solid #1c1c22;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-social {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-social.instagram {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            box-shadow: 0 4px 15px rgba(220, 39, 67, 0.3);
+        }
+
+        .btn-social.facebook {
+            background: #1877f2;
+            box-shadow: 0 4px 15px rgba(24, 119, 242, 0.3);
+        }
+
+        .btn-social:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(255,255,255,0.2);
+        }
+
+        /* LEGAL & RECHTSTEXTE (AGB / DATENSCHUTZ ACCORDION) */
+        .legal-section {
+            padding: 80px 5%;
+            background: #0f0f12;
+            border-top: 1px solid #1c1c22;
+        }
+
+        .legal-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .legal-box {
+            margin-bottom: 20px;
+            background: var(--bg-card);
+            border: 1px solid #222;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .legal-trigger {
+            display: block;
+            padding: 20px;
+            color: var(--text-light);
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: #181820;
+            user-select: none;
+            transition: background 0.3s, color 0.3s;
+            position: relative;
+        }
+
+        .legal-trigger:hover {
+            background: #1f1f2a;
+            color: var(--accent);
+        }
+
+        .legal-trigger::after {
+            content: "▼";
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            transition: transform 0.3s;
+        }
+
+        .legal-checkbox {
+            display: none;
+        }
+
+        .legal-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+            padding: 0 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .legal-content-inner {
+            padding: 20px 0;
+        }
+
+        .legal-content h4 {
+            color: var(--text-light);
+            margin: 15px 0 5px 0;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+        }
+
+        .legal-checkbox:checked ~ .legal-content {
+            max-height: 2000px; /* Genug Raum für Textfluss */
+            transition: max-height 1s cubic-bezier(0.99, 0.01, 0.45, 1);
+        }
+
+        .legal-checkbox:checked ~ .legal-trigger::after {
+            transform: translateY(-50%) rotate(180deg);
+            color: var(--accent);
+        }
+
+        .tuning-alert {
+            background: rgba(255, 50, 50, 0.1);
+            border-left: 4px solid #ff3232;
+            padding: 15px;
+            margin: 15px 0;
+            color: #ff8888;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* IMPRESSUM & FOOTER */
+        .footer {
+            background: var(--bg-main);
+            padding: 60px 5% 40px 5%;
+            border-top: 2px solid var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-box h4 {
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        .footer-box p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .footer-box a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-box a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #1c1c22;
+            color: #555;
+            font-size: 0.8rem;
+        }
+
+        /* FIXED FLOATING SIDE BUTTONS (WHATSAPP & CALL) */
+        .floating-action-container {
+            position: fixed;
+            bottom: 30px;
+            right: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 999;
+        }
+
+        .btn-float {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        .btn-float.whatsapp {
+            background-color: #25D366;
+            animation: pulseGlow 2s infinite;
+        }
+
+        .btn-float.phone {
+            background-color: var(--accent);
+            color: #000;
+        }
+
+        .btn-float:hover {
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+        }
+
+        /* SVG ICONS INSIDE BUTTONS FOR CRISP LOOK */
+        .btn-float svg {
+            width: 26px;
+            height: 26px;
+            fill: currentColor;
+        }
+
+        /* ANIMATIONS CODES */
+        @keyframes driveIn {
+            0% { transform: translateX(-100px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        /* RESPONSIVE DESIGN ADJUSTMENTS */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.3rem; }
+            .navbar { flex-direction: column; gap: 15px; }
+            .nav-links { font-size: 0.8rem; }
+            .floating-action-container { bottom: 20px; right: 15px; }
+            .btn-float { width: 50px; height: 50px; }
         }
     </style>
 </head>
 <body>
-    <h1>Willkommen bei Elf Automotive!</h1>
-    <p>Unsere neue Website befindet sich gerade im Aufbau.</p>
-    <p>Schauen Sie bald wieder vorbei!</p>
+
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="logo.png" alt="Elf Automotive Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#flyers">Flyers</a></li>
+            <li><a href="#legal">AGB & DSG</a></li>
+            <li><a href="#impressum">Impressum</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero" id="home">
+        <h1>Welcome to <span>Elf Automotive</span></h1>
+        <p>Ihre Experten für professionelle Fahrzeugreparaturen, qualifizierten Service und massgeschneidertes Tuning in der Schweiz.</p>
+        <a href="tel:0798288606" class="btn-main">Jetzt Termin buchen</a>
+    </header>
+
+    <section class="services-section" id="services">
+        <h2 class="section-title">Unsere Kompetenzen</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>Reparaturen</h3>
+                <p>Fachgerechte Behebung von Schäden, Motorendiagnose und mechanische Instandsetzungen aller Fahrzeugmarken nach höchsten Qualitätsstandards.</p>
+            </div>
+            <div class="service-card">
+                <h3>Fahrzeug-Tuning</h3>
+                <p>Individuelle Performance-Steigerungen, optische Modifikationen, Fahrwerkstechnik und Abgasanlagen für das maximale Fahrerlebnis.</p>
+            </div>
+            <div class="service-card">
+                <h3>Service & MFK</h3>
+                <p>Regelmässige Inspektionen, Ölwechsel, Bremsenservice sowie die lückenlose Vorbereitung und Vorführung Ihres Fahrzeugs bei der MFK.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="flyer-section" id="flyers">
+        <h2 class="section-title">Aktuelle Flyer & Aktionen</h2>
+        <div class="flyer-grid">
+            <div class="flyer-item">
+                <img src="bild1.png" alt="Flyer 1">
+                <div class="flyer-overlay">Aktion 1</div>
+            </div>
+            <div class="flyer-item">
+                <img src="bild2.png" alt="Flyer 2">
+                <div class="flyer-overlay">Aktion 2</div>
+            </div>
+            <div class="flyer-item">
+                <img src="bild3.png" alt="Flyer 3">
+                <div class="flyer-overlay">Aktion 3</div>
+            </div>
+            <div class="flyer-item">
+                <img src="bild4.png" alt="Flyer 4">
+                <div class="flyer-overlay">Aktion 4</div>
+            </div>
+            <div class="flyer-item">
+                <img src="bild5.png" alt="Flyer 5">
+                <div class="flyer-overlay">Aktion 5</div>
+            </div>
+            <div class="flyer-item">
+                <img src="bild6.png" alt="Flyer 6">
+                <div class="flyer-overlay">Aktion 6</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="social-section">
+        <h2 class="section-title">Folgen Sie uns</h2>
+        <p>Bleiben Sie auf unseren Social-Media-Kanälen immer über aktuelle Projekte und Umbauten informiert.</p>
+        <div class="social-buttons">
+            <a href="https://www.instagram.com/elf_automotive?igsh=MXcxNDhtNmpub2J3bQ==" target="_blank" class="btn-social instagram">
+                Instagram
+            </a>
+            <a href="https://www.facebook.com/share/1BNTWFXirj/" target="_blank" class="btn-social facebook">
+                Facebook
+            </a>
+        </div>
+    </section>
+
+    <section class="legal-section" id="legal">
+        <div class="legal-container">
+            <h2 class="section-title" style="display: block; text-align: center;">Rechtliches</h2>
+            
+            <div class="legal-box">
+                <input type="checkbox" id="legal-agb" class="legal-checkbox">
+                <label Aks="legal-agb" for="legal-agb" class="legal-trigger">Allgemeine Geschäftsbedingungen (AGB)</label>
+                <div class="legal-content">
+                    <div class="legal-content-inner">
+                        <h4>1. Geltungsbereich</h4>
+                        <p>Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Verträge, Reparaturen, Tuning-Leistungen und Services, die zwischen Elf Automotive (nachfolgend "Garage") und ihren Kunden in der Werkstatt oder über die Website abgeschlossen werden.</p>
+                        
+                        <h4>2. Tuning & Modifikationen (Wichtiger Schweizer Hinweis)</h4>
+                        <div class="tuning-alert">
+                            <strong>ACHTUNG BEI TUNING-LEISTUNGEN:</strong> Leistungssteigerungen, Softwareoptimierungen und bauliche Veränderungen (z.B. Fahrwerk, Abgasanlagen) können die Typengenehmigung des Fahrzeugs beeinflussen. Sofern nicht ausdrücklich schriftlich vereinbart, ist der Kunde vollumfänglich selbst dafür verantwortlich, die Modifikationen bei der zuständigen Prüfstelle (MFK / Strassenverkehrsamt) eintragen zu lassen und die gesetzlichen Vorschriften der VTS einzuhalten. Die Garage übernimmt keine Haftung für nicht zugelassene Bauteile im Strassenverkehr.
+                        </div>
+
+                        <h4>3. Auftragserteilung & Kostenvoranschlag</h4>
+                        <p>Die im Kostenvoranschlag genannten Beträge sind Richtwerte. Überschreitungen von bis zu 10% können ohne vorherige Rücksprache mit dem Kunden vorgenommen werden, sofern dies zur ordnungsgemässen Fertigstellung der Reparatur notwendig ist.</p>
+
+                        <h4>4. Zahlungsbedingungen</h4>
+                        <p>Alle Leistungen und verbauten Ersatzteile sind, sofern nicht anders schriftlich vereinbart, direkt bei Abholung des Fahrzeugs in bar oder mittels akzeptierter elektronischer Zahlungsmittel zu begleichen. Die Garage behält sich das gesetzliche Retentionsrecht (Zurückbehaltungsrecht) am Fahrzeug bis zur vollständigen Bezahlung vor.</p>
+
+                        <h4>5. Gewährleistung & Haftung</h4>
+                        <p>Die Garage gewährt die gesetzliche Gewährleistung auf ausgeführte Reparaturarbeiten und verbaute Originalteile. Jede Gewährleistung und Haftung für Mängel, die auf regulären Verschleiss, unsachgemässe Handhabung durch den Kunden (z.B. im Rennsport) oder nachträgliche Fremdeingriffe zurückzuführen sind, wird wegbedungen.</p>
+
+                        <h4>6. Gerichtsstand</h4>
+                        <p>Als ausschliesslicher Gerichtsstand gilt, soweit gesetzlich zulässig, der Sitz der Garage (St. Margrethen, SG). Es gilt ausschliesslich Schweizer Recht.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="legal-box">
+                <input type="checkbox" id="legal-dsg" class="legal-checkbox">
+                <label for="legal-dsg" class="legal-trigger">Datenschutzerklärung (DSG Schweiz)</label>
+                <div class="legal-content">
+                    <div class="legal-content-inner">
+                        <h4>1. Allgemeine Informationen</h4>
+                        <p>Verantwortlicher für die Datenverarbeitung auf dieser Website im Sinne des Schweizer Bundesgesetzes über den Datenschutz (DSG) ist Egzon Saqipi (Elf Automotive). Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst und behandeln Ihre personenbezogenen Daten vertraulich und entsprechend den gesetzlichen Vorschriften.</p>
+
+                        <h4>2. Datenerfassung bei Kontaktaufnahme</h4>
+                        <p>Wenn Sie uns per E-Mail, Telefon oder über verlinkte Messenger (WhatsApp) kontaktieren, werden Ihre Angaben (Name, Telefonnummer, E-Mail-Adresse, Fahrzeuginformationen) zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns intern gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung an Dritte weiter.</p>
+
+                        <h4>3. Hosting auf GitHub Pages</h4>
+                        <p>Diese Website wird auf Servern von GitHub Inc. (USA) via "GitHub Pages" gehostet. Beim Aufruf dieser Website erfasst GitHub automatisch Logdaten (z. B. IP-Adresse, Datum/Uhrzeit des Zugriffs, Browsertyp). Dies ist technisch erforderlich, um die Stabilität und Sicherheit der Website zu gewährleisten. Die Datenschutzbestimmungen von GitHub finden Anwendung.</p>
+
+                        <h4>4. Ihre Rechte</h4>
+                        <p>Sie haben nach Schweizer Datenschutzrecht jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung sowie ein Recht auf Berichtigung, Sperrung oder Löschung dieser Daten. Wenden Sie sich hierzu einfach an unsere im Impressum hinterlegte Adresse.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="footer" id="impressum">
+        <div class="footer-grid">
+            <div class="footer-box">
+                <h4>Impressum</h4>
+                <p><strong>Geschäftsinhaber:</strong><br>Egzon Saqipi</p>
+                <p><strong>Adresse:</strong><br>Parkstrasse 15/a<br>9430 St. Margrethen<br>Schweiz</p>
+                <p><strong>UID-Nummer:</strong><br>CHE-388.627.085</p>
+            </div>
+
+            <div class="footer-box">
+                <h4>Kontakt</h4>
+                <p><strong>Telefon:</strong><br><a href="tel:0798288606">079 828 86 06</a></p>
+                <p><strong>E-Mail:</strong><br><a href="mailto:Elf-Automotive@hotmail.com">Elf-Automotive@hotmail.com</a></p>
+            </div>
+
+            <div class="footer-box">
+                <h4>Werkstattzeiten</h4>
+                <p>Montag - Freitag:<br>Nach telefonischer Vereinbarung</p>
+                <p>Samstag:<br>Nach Vereinbarung</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            &copy; 2026 Elf Automotive. All Rights Reserved. Designed for Performance.
+        </div>
+    </footer>
+
+    <div class="floating-action-container">
+        <a href="tel:0798288606" class="btn-float phone" title="Jetzt anrufen">
+            <svg viewBox="0 0 24 24">
+                <path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
+            </svg>
+        </a>
+        <a href="https://wa.me/41798288606?text=Guten%20Tag%20Elf%20Automotive,%20ich%20interessiere%20mich%20f%C3%BCr%20einen%20Termin." target="_blank" class="btn-float whatsapp" title="WhatsApp Nachricht senden">
+            <svg viewBox="0 0 24 24">
+                <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.81 9.81 0 0 0 12.04 2zm5.79 13.92c-.25.7-.1.14-.56.76-.45.62-1.03.92-1.68 1.1-.65.18-1.42.25-3.8-.72-2.39-.97-3.92-3.39-4.04-3.55-.12-.17-1.02-1.36-1.02-2.59 0-1.23.64-1.83.87-2.08.23-.25.5-.31.66-.31.17 0 .34.01.48.01.15 0 .35-.06.55.42.2.49.69 1.68.75 1.8.06.12.1.27.01.44-.08.18-.13.29-.27.45-.13.16-.28.36-.4.51-.13.15-.27.31-.11.58.16.27.72 1.19 1.55 1.93.83.74 1.53 1.01 1.8 1.15.27.14.43.12.59-.06.16-.18.69-.81.88-1.08.19-.27.38-.23.64-.13s1.64.77 1.92.91c.28.14.47.21.54.33.07.12.07.71-.18 1.41z"/>
+            </svg>
+        </a>
+    </div>
+
 </body>
 </html>
