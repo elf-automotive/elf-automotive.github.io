@@ -60,7 +60,7 @@
         }
 
         .logo-container img {
-            height: 90px; /* Logo deutlich vergrössert */
+            height: 120px; /* Logo deutlich vergrössert Turn 1 von Turn 1 Turn 1 90px Turn 1 */
             object-fit: contain;
             filter: drop-shadow(0 0 10px var(--accent-glow));
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -590,6 +590,156 @@
             fill: currentColor;
         }
 
+        /* New: Turn 1 schematic Turn 1 block Turn 1 */
+        #engine-background {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: var(--bg-main); /* Ensure Turn 1 Turn 1 */
+            z-index: -10; /* Behind everything Turn 1 */
+            pointer-events: none; /* Let clicks pass through Turn 1 */
+            perspective: 2000px;
+            overflow: hidden;
+            opacity: 0.12; /* Super subtle and sleek */
+        }
+
+        /* Simulate Turn 1 background texture for Turn 1 */
+        #engine-background::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(27deg, #111 5px, transparent 5px) 0 5px,
+                        linear-gradient(27deg, #181818 5px, transparent 5px) 10px 10px,
+                        linear-gradient(117deg, #111 5px, transparent 5px) 0 0,
+                        linear-gradient(117deg, #181818 5px, transparent 5px) 10px 5px;
+            background-size: 20px 20px;
+            opacity: 0.15;
+            z-index: -1;
+        }
+        #engine-background::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 500px; height: 500px;
+            background: var(--accent);
+            filter: blur(250px);
+            opacity: 0.2;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+
+        /* Turn 1 schematic as Turn 1 */
+        .main-block, .cylinder-block, .crankshaft-container, .crankshaft, .cylinder, .piston, .connecting-rod {
+            position: absolute;
+            transform-style: preserve-3d;
+        }
+
+        .main-block {
+            width: 60%;
+            height: 30vh;
+            top: 35vh;
+            left: 20%;
+            background: rgba(13, 13, 16, 0.8);
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+            border-radius: 10px;
+            transform: rotateX(10deg);
+        }
+
+        .cylinder-block {
+            width: 60%;
+            height: 25vh;
+            top: 10vh;
+            left: 20%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            perspective: 2000px;
+            transform: rotateX(10deg);
+        }
+
+        .cylinder {
+            width: 15%;
+            height: 100%;
+            border-left: 2px solid var(--accent);
+            border-right: 2px solid var(--accent);
+            position: relative;
+        }
+        .cylinder::before, .cylinder::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+            box-shadow: 0 0 5px var(--accent-glow);
+        }
+        .cylinder::before { top: 0; }
+        .cylinder::after { bottom: 0; }
+
+        .piston {
+            width: 100%;
+            height: 10%;
+            background: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+            top: 45%; /* Neutral position Turn 1 */
+            left: 0;
+            border-radius: 5px;
+        }
+
+        .connecting-rod {
+            width: 20%;
+            height: 100%;
+            background: var(--text-muted);
+            top: 10%;
+            left: 40%;
+            border-radius: 5px;
+            transform-origin: bottom center;
+        }
+
+        .crankshaft-container {
+            width: 60%;
+            height: 5vh;
+            top: 75vh;
+            left: 20%;
+            perspective: 2000px;
+        }
+
+        .crankshaft {
+            width: 100%;
+            height: 100%;
+            border-top: 2px solid var(--accent);
+            border-bottom: 2px solid var(--accent);
+            position: relative;
+        }
+        .crankshaft::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: var(--accent);
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* ANIMATIONS Turn 1 */
+        .cylinder { animation: cylinderTurn 1.5s ease-in-out infinite alternate; }
+        .cyl2 { animation-delay: -0.3s; }
+        .cyl3 { animation-delay: -0.6s; }
+        .cyl4 { animation-delay: -0.9s; }
+
+        .piston { animation: pistonStroke 1.5s ease-in-out infinite alternate; }
+        .cyl2 .piston { animation-delay: -0.3s; }
+        .cyl3 .piston { animation-delay: -0.6s; }
+        .cyl4 .piston { animation-delay: -0.9s; }
+
+        .connecting-rod { animation: rodSwing 1.5s ease-in-out infinite alternate; }
+        .cyl2 .connecting-rod { animation-delay: -0.3s; }
+        .cyl3 .connecting-rod { animation-delay: -0.6s; }
+        .cyl4 .connecting-rod { animation-delay: -0.9s; }
+
+        .crankshaft { animation: crankshaftSpin 1.5s linear infinite; }
+
         /* ANIMATIONS CODES */
         @keyframes popIn {
             0% { transform: scale(0.8) translateY(50px); opacity: 0; }
@@ -610,9 +760,27 @@
             75%, 100% { transform: scale(1.8); opacity: 0; }
         }
 
+        /* schematic Turn 1 animations */
+        @keyframes cylinderTurn {
+            0%, 100% { transform: rotateY(0deg) rotateX(0deg); }
+            50% { transform: rotateY(10deg) rotateX(5deg); }
+        }
+        @keyframes pistonStroke {
+            0%, 100% { transform: translateY(-45%); }
+            50% { transform: translateY(45%); }
+        }
+        @keyframes rodSwing {
+            0%, 100% { transform: rotateX(-15deg); }
+            50% { transform: rotateX(15deg); }
+        }
+        @keyframes crankshaftSpin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
         /* RESPONSIVE DESIGN ADJUSTMENTS */
         @media (max-width: 768px) {
-            .logo-container img { height: 65px; } /* Etwas kleiner für Mobile, aber immer noch präsent */
+            .logo-container img { height: 90px; } /* Logo deutlich Turn 1 Turn 1, Turn 1 Turn 1 Turn 1 */
             .hero h1 { font-size: 2.5rem; }
             .navbar { flex-direction: column; gap: 20px; padding: 20px 5%; }
             .nav-links { flex-wrap: wrap; justify-content: center; gap: 15px; }
@@ -792,6 +960,31 @@
                 <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.81 9.81 0 0 0 12.04 2zm5.79 13.92c-.25.7-.1.14-.56.76-.45.62-1.03.92-1.68 1.1-.65.18-1.42.25-3.8-.72-2.39-.97-3.92-3.39-4.04-3.55-.12-.17-1.02-1.36-1.02-2.59 0-1.23.64-1.83.87-2.08.23-.25.5-.31.66-.31.17 0 .34.01.48.01.15 0 .35-.06.55.42.2.49.69 1.68.75 1.8.06.12.1.27.01.44-.08.18-.13.29-.27.45-.13.16-.28.36-.4.51-.13.15-.27.31-.11.58.16.27.72 1.19 1.55 1.93.83.74 1.53 1.01 1.8 1.15.27.14.43.12.59-.06.16-.18.69-.81.88-1.08.19-.27.38-.23.64-.13s1.64.77 1.92.91c.28.14.47.21.54.33.07.12.07.71-.18 1.41z"/>
             </svg>
         </a>
+    </div>
+
+    <div id="engine-background">
+        <div class="main-block"></div>
+        <div class="cylinder-block">
+            <div class="cylinder cyl1">
+                <div class="piston"></div>
+                <div class="connecting-rod"></div>
+            </div>
+            <div class="cylinder cyl2">
+                <div class="piston"></div>
+                <div class="connecting-rod"></div>
+            </div>
+            <div class="cylinder cyl3">
+                <div class="piston"></div>
+                <div class="connecting-rod"></div>
+            </div>
+            <div class="cylinder cyl4">
+                <div class="piston"></div>
+                <div class="connecting-rod"></div>
+            </div>
+        </div>
+        <div class="crankshaft-container">
+            <div class="crankshaft"></div>
+        </div>
     </div>
 
 </body>
